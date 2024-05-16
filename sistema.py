@@ -5,7 +5,9 @@ import time
 
 
 # variaveis globais
-listagem_deposito = listagem_saque = []
+listagem_deposito = []
+listagem_saque = []
+listagem_completa = []
 saldo = deposito =  saque = cont = 0 
 
 clear = lambda: os.system('cls')
@@ -33,7 +35,7 @@ def verificando():
     print(mensagem_deposito+"..")
     time.sleep(0.5)
 
-while True:
+def op_inicial():
     if cont > 1:
         clear()
         
@@ -49,10 +51,28 @@ while True:
         |   5- Sair            |
         |______________________|
     """)
+def op_extrato():
+    if cont > 1:
+        clear()
+        
+    print("""
+        Sistema bancário GX
+         ______________________   
+        |    Operações de      |
+        |      Extrato:        |
+        |                      |
+        |   1- Deposito        |
+        |   2- Saque           |
+        |   3- Completa        |
+        |   4- Sair            |
+        |______________________|
+    """)
+    
+
+while True:
+    op_inicial()
+
     esc = int(input("Escolha uma operação: "))
-
-
-
     if esc == 1:
         while True:
             try:
@@ -68,11 +88,12 @@ while True:
                 depositando()
                 print(f"valor depositado Com sucesso")
                 listagem_deposito.append(deposito)
+                listagem_completa.append(deposito)
                 saldo += deposito
                 time.sleep(2)
                 clear()
                 break
-    if esc == 2:
+    elif esc == 2:
         while True:
             try:
                 saque = int(input("Informe o valor de saque: "))
@@ -90,18 +111,52 @@ while True:
                 verificando()
                 print(f"valor sacado Com sucesso")
                 listagem_saque.append(saque)
+                listagem_completa.append(-saque)
                 saldo -= saque
                 time.sleep(2)
                 clear()
                 break
-                
-    if esc == 4:
+    elif esc == 3:
+        while True:
+            clear()
+            op_extrato()
+            esc_extrato = int(input("Informe uma modalidade de extrato: "))
+            match esc_extrato:
+                case 1:
+                    for d in listagem_deposito:
+                        print(f"Depositado:{d}")
+                    time.sleep(4)
+                        
+                case 2:
+                    for s in listagem_saque:
+                        print(f"Sacado: {s}")
+                    time.sleep(4)
+                case 3:
+                    for i in listagem_completa:
+                        if i > 0:
+                            print(f"Deposito: {i}")
+                        elif i < 0:
+                            print(f"Sacado: {i}")
+                        else:
+                            print("erro!")
+                    time.sleep(4)
+                case 4:
+                    break
+
+                case _:
+                    print("erro, tente novamente:")
+                    continue
+                        
+                        
+                            
+    elif esc == 4:
         clear()
         print(f"{" "*40}Saldo da conta: {saldo}")
         time.sleep(3)
-    if esc == 5:
+    elif esc == 5:
         clear()
         print(f"{" "*40}Obrigado pela confiança!")
         time.sleep(2)
         break
+    
     cont+=1
