@@ -8,6 +8,8 @@
 **sistema-bacario-simples** é composto por:
 - Deposito
 - Saque
-- Extrato - (ainda em implementação)
+- Extrato 
 - Saldo
 - Encerramento do programa
+
+
