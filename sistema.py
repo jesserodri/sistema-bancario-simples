@@ -12,28 +12,6 @@ saldo = deposito =  saque = cont = 0
 
 clear = lambda: os.system('cls')
 
-def depositando():
-    clear()
-    mensagem_deposito ="deposintando."
-    print(mensagem_deposito)
-    time.sleep(1)
-    clear()
-    print(mensagem_deposito+".")
-    time.sleep(1)
-    clear()
-    print(mensagem_deposito+"..")
-    time.sleep(1)
-def verificando():
-    clear()
-    mensagem_deposito ="verificações."
-    print(mensagem_deposito)
-    time.sleep(0.5)
-    clear()
-    print(mensagem_deposito+".")
-    time.sleep(0.5)
-    clear()
-    print(mensagem_deposito+"..")
-    time.sleep(0.5)
 
 def op_inicial():
     if cont > 1:
@@ -51,6 +29,7 @@ def op_inicial():
         |   5- Sair            |
         |______________________|
     """)
+    
 def op_extrato():
     if cont > 1:
         clear()
@@ -67,55 +46,77 @@ def op_extrato():
         |   4- Sair            |
         |______________________|
     """)
-    
 
-while True:
-    op_inicial()
+def loading(text):
+    clear()
+    mensagem_deposito = text+"."
+    print(mensagem_deposito)
+    time.sleep(0.5)
+    clear()
+    print(mensagem_deposito+".")
+    time.sleep(0.5)
+    clear()
+    print(mensagem_deposito+"..")
+    time.sleep(0.5)
 
-    esc = int(input("Escolha uma operação: "))
-    if esc == 1:
-        while True:
-            try:
-                deposito = int(input("Informe o valor de deposito: "))
-            except ValueError:
-                print("... Value Error")
-
-            if deposito <=1:
-                depositando()
-                print("valor depositado é nulo, negativo ou texto, tente novamente...")
-                continue
-            else:
-                depositando()
-                print(f"valor depositado Com sucesso")
-                listagem_deposito.append(deposito)
-                listagem_completa.append(deposito)
-                saldo += deposito
-                time.sleep(2)
-                clear()
-                break
-    elif esc == 2:
-        while True:
+def sacar(saque, saldo):
+    while True:
             try:
                 saque = int(input("Informe o valor de saque: "))
             except ValueError:
                 print("... Value Error")
 
             if saque <=1:
-                verificando()
+                loading("Verificando Saque")
                 print("valor de saque é nulo, negativo ou texto, tente novamente...")
                 continue
             elif saque > saldo:
-                verificando()
+                loading("Verificando Saque")
                 print("Valor de saque é maior que o saldo atual ou é um texto! Tente novamente.")
             else:
-                verificando()
-                print(f"valor sacado Com sucesso")
-                listagem_saque.append(saque)
-                listagem_completa.append(-saque)
-                saldo -= saque
-                time.sleep(2)
-                clear()
-                break
+                loading("Verificando Saque")
+                return saque
+
+def depositar(deposito):
+    while True:
+            try:
+                deposito = int(input("Informe o valor de deposito: "))
+            except ValueError:
+                print("... Value Error")
+
+            if deposito <=1:
+                loading("Depositando")
+                print("valor depositado é nulo, negativo ou texto, tente novamente...")
+                continue
+            else:
+                loading("Depositando")
+                return deposito
+
+while True:
+    op_inicial() 
+
+    esc = int(input("Escolha uma operação: "))
+    if esc == 1:
+        
+        novo_deposito = depositar(deposito)
+        print(f"valor depositado Com sucesso")
+        listagem_deposito.append(novo_deposito)
+        listagem_completa.append(novo_deposito)
+        saldo += novo_deposito
+        time.sleep(2)
+        clear()
+        continue
+
+    elif esc == 2:
+        novo_saque = sacar(saque, saldo)
+        print(f"valor sacado Com sucesso")
+        listagem_saque.append(novo_saque)
+        listagem_completa.append(-novo_saque)
+        saldo -= novo_saque
+        time.sleep(2)
+        clear()
+        continue
+
     elif esc == 3:
         while True:
             clear()
@@ -146,13 +147,12 @@ while True:
                 case _:
                     print("erro, tente novamente:")
                     continue
-                        
-                        
-                            
+                                             
     elif esc == 4:
         clear()
         print(f"{" "*40}Saldo da conta: {saldo}")
         time.sleep(3)
+    
     elif esc == 5:
         clear()
         print(f"{" "*40}Obrigado pela confiança!")
