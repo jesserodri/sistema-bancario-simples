@@ -1,7 +1,7 @@
 # sistema-bancario-simples 😄
 
 ## Proposta 💬
-- `projeto simples` para testar a lógica com python
+- `projeto simples` para testar a lógica com python, `Adicionando melhorias...`
 
 ## Estrutura
 
