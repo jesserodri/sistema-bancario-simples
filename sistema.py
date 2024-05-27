@@ -8,8 +8,10 @@ import time
 listagem_deposito = []
 listagem_saque = []
 listagem_completa = []
-saldo = deposito =  saque = cont = 0 
+saldo = 0
+deposito =  saque = cont = 0 
 
+#limpar prompt
 clear = lambda: os.system('cls')
 
 
@@ -31,21 +33,51 @@ def op_inicial():
     """)
     
 def op_extrato():
-    if cont > 1:
-        clear()
+    cont=0
+    while True:
+        if cont > 1:
+            clear()
+            
+        print("""
+            Sistema bancário GX
+            ______________________   
+            |    Operações de      |
+            |      Extrato:        |
+            |                      |
+            |   1- Deposito        |
+            |   2- Saque           |
+            |   3- Completa        |
+            |   4- Sair            |
+            |______________________|
+        """)
+        esc_extrato = int(input("Informe uma modalidade de extrato: "))
         
-    print("""
-        Sistema bancário GX
-         ______________________   
-        |    Operações de      |
-        |      Extrato:        |
-        |                      |
-        |   1- Deposito        |
-        |   2- Saque           |
-        |   3- Completa        |
-        |   4- Sair            |
-        |______________________|
-    """)
+        match esc_extrato:
+            case 1:
+                for d in listagem_deposito:
+                    print(f"Depositado:{d}")
+                time.sleep(4)
+                    
+            case 2:
+                for s in listagem_saque:
+                    print(f"Sacado: {s}")
+                time.sleep(4)
+            case 3:
+                for i in listagem_completa:
+                    if i > 0:
+                        print(f"Deposito: {i}")
+                    elif i < 0:
+                        print(f"Sacado: {i}")
+                    else:
+                        print("erro!")
+                time.sleep(4)
+            case 4:
+                break
+
+            case _:
+                print("erro, tente novamente:")
+                continue
+        cont+=1        
 
 def loading(text):
     clear()
@@ -62,35 +94,50 @@ def loading(text):
 def sacar(saque, saldo):
     while True:
             try:
-                saque = int(input("Informe o valor de saque: "))
+                saque = int(input("Informe o valor de saque ou 0 para cancelar operação:"))
             except ValueError:
                 print("... Value Error")
+            
+            if saque == 0:
+                loading("Cancelando Operação")
+                print(f"valor sacado Com sucesso")
+                return 0
 
-            if saque <=1:
+            elif saque <=0:
                 loading("Verificando Saque")
-                print("valor de saque é nulo, negativo ou texto, tente novamente...")
+                print("valor de saque é negativo ou texto, tente novamente...")
                 continue
+            
             elif saque > saldo:
                 loading("Verificando Saque")
                 print("Valor de saque é maior que o saldo atual ou é um texto! Tente novamente.")
             else:
                 loading("Verificando Saque")
+                listagem_saque.append(saque)
+                listagem_completa.append(-saque)
+                
                 return saque
 
-def depositar(deposito):
+def depositar(dep = deposito):
     while True:
             try:
-                deposito = int(input("Informe o valor de deposito: "))
+                dep = int(input("Informe o valor de deposito ou 0 para cancelar operação: "))
             except ValueError:
                 print("... Value Error")
-
-            if deposito <=1:
+            
+            if dep == 0:
+                loading("Cancelando Operação")
+                return 0
+            elif dep<=1:
                 loading("Depositando")
-                print("valor depositado é nulo, negativo ou texto, tente novamente...")
+                print("valor depositado é negativo ou texto, tente novamente...")
                 continue
             else:
                 loading("Depositando")
-                return deposito
+                listagem_deposito.append(dep)
+                listagem_completa.append(dep)
+                print(f"valor depositado Com sucesso")
+                return dep
 
 while True:
     op_inicial() 
@@ -99,9 +146,6 @@ while True:
     if esc == 1:
         
         novo_deposito = depositar(deposito)
-        print(f"valor depositado Com sucesso")
-        listagem_deposito.append(novo_deposito)
-        listagem_completa.append(novo_deposito)
         saldo += novo_deposito
         time.sleep(2)
         clear()
@@ -109,44 +153,14 @@ while True:
 
     elif esc == 2:
         novo_saque = sacar(saque, saldo)
-        print(f"valor sacado Com sucesso")
-        listagem_saque.append(novo_saque)
-        listagem_completa.append(-novo_saque)
         saldo -= novo_saque
         time.sleep(2)
         clear()
         continue
 
     elif esc == 3:
-        while True:
-            clear()
             op_extrato()
-            esc_extrato = int(input("Informe uma modalidade de extrato: "))
-            match esc_extrato:
-                case 1:
-                    for d in listagem_deposito:
-                        print(f"Depositado:{d}")
-                    time.sleep(4)
-                        
-                case 2:
-                    for s in listagem_saque:
-                        print(f"Sacado: {s}")
-                    time.sleep(4)
-                case 3:
-                    for i in listagem_completa:
-                        if i > 0:
-                            print(f"Deposito: {i}")
-                        elif i < 0:
-                            print(f"Sacado: {i}")
-                        else:
-                            print("erro!")
-                    time.sleep(4)
-                case 4:
-                    break
-
-                case _:
-                    print("erro, tente novamente:")
-                    continue
+           
                                              
     elif esc == 4:
         clear()
